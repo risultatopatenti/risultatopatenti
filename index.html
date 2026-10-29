@@ -105,7 +105,11 @@ const CONFIG = {
   simDomande: 30, simMinuti: 20, erroriMax: 3,   // simulazione d’esame
   schede: [["B","B (auto)"],["AM","AM (ciclomotori)"],["A","A1, A2, A (moto)"],["BE","BE (auto + rimorchio)"]],
   prezzi: { AM: 39.99, B: 59.99, BE: 69.99, A: 49.99 },   // prezzo della correzione; "A" vale per A1, A2 e A
-  linkPagamento: { AM: "", B: "", BE: "", A: "" },       // incolla qui i link di pagamento (es. Stripe Payment Link)
+  linkPagamento: {   // link Stripe in SANDBOX (carte di prova): in produzione sostituiscili con quelli live
+    AM: "https://buy.stripe.com/test_7sY00caPV3pne3geevbAs00",
+    B: "https://buy.stripe.com/test_00wbIU9LRe416AOb2jbAs01",
+    BE: "https://buy.stripe.com/test_9B6eV6f6b7FD9N0gmDbAs02",
+    A: "https://buy.stripe.com/test_8x29AM5vBcZX8IW4DVbAs03" },       // incolla qui i link di pagamento (es. Stripe Payment Link)
   modalitaTest: true,                                     // true = pulsante “Simula acquisto” senza addebito: METTI false prima del lancio
   adminHash: "43e540e21cb5ae8555717f28d6b00857674024d7a227f3efcc7f2c46b3cd588e",   // SHA-256 della password staff (Ctrl+F8)
   // banca Vero/Falso: [argomento, affermazione, 1=Vero 0=Falso] – aggiungi qui nuove domande
@@ -190,7 +194,7 @@ const pagine = {
           <div class="riga"><span class="numero">4b.</span><span class="valore">01.01.2034</span></div>
           <div class="riga"><span class="numero">5.</span><span class="valore">ESEMPIO000000</span></div></div></div>
         <div class="patente-categorie">${["AM","A1","A2","B","BE"].map(c => `<div class="cat">${c}</div>`).join("")}
-          <button class="cta-test" onclick="location.hash='quiz'">Fai il tuo test di guida! Vai su: I Test -> Quiz Patente!</button></div>
+          <button class="cta-test" onclick="location.hash='quiz'">Fai il tuo test di guida!</button></div>
       </div></div>
       <div class="scroll-hint">▼ scorri per continuare</div></section></div>
       <div class="wrap"><h1>Dalla teoria alla patente, con calma e metodo</h1>

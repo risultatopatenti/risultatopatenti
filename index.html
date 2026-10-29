@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Promosso Patenti – Beta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0f1f1c;--card:#17332e;--txt:#f5fff9;--mut:#a8c7bf;--acc:#0d9488;--acc2:#5eead4;--ok:#2e9e5b;--ko:#d64545;--hd:#fbbf24;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:Arial,sans-serif;margin:0}
+a{color:var(--acc2)}
+header{background:var(--hd);color:#000;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:10px;position:relative;z-index:5}
+header p{margin:0}header .sp{flex:1}
+.beta{background:#ffcc00;color:#000;font-size:11px;font-weight:bold;padding:2px 6px;border-radius:4px;margin-left:6px}
+.bottone{border:2px solid #000;border-radius:8px;padding:8px 10px;background:#fff;color:#000;cursor:pointer;font-size:14px}
+.dropdown{position:relative;display:inline-block}
+.dropdown-content{display:none;position:absolute;background:#f1f1f1;min-width:170px;box-shadow:0 8px 16px rgba(0,0,0,.2);z-index:6;border-radius:4px}
+.dropdown-content.show{display:block}
+.dropdown-content a{color:#000;padding:12px 16px;text-decoration:none;display:block}
+.dropdown-content a:hover{background:#ddd}
+.banner{background:#ffcc00;color:#000;text-align:center;padding:6px;font-size:13px}
+main{min-height:60vh}
+.wrap{max-width:820px;margin:0 auto;padding:24px 16px}
+.card{background:var(--card);border-radius:12px;padding:18px;margin:14px 0;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+h1,h2{margin:.2em 0 .5em}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-size:15px;font-weight:bold;cursor:pointer}
+.btn:hover{filter:brightness(1.15)}.btn.sec{background:#555}.btn.del{background:var(--ko)}
+input,select,textarea{width:100%;padding:10px;margin:5px 0 10px;border-radius:8px;border:1px solid #666;background:#1f1f1f;color:#fff;font-size:15px;font-family:inherit}
+input[type=radio]{width:auto;margin:0 8px 0 0}
+.opt{display:block;width:100%;text-align:left;background:#1f1f1f;color:#fff;border:2px solid #555;border-radius:10px;padding:12px;margin:8px 0;font-size:15px;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:#1d3a2a}.opt.ko{border-color:var(--ko);background:#4a2323}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mut{color:var(--mut);font-size:13px}
+.msg{padding:8px 12px;border-radius:8px;margin:8px 0}.msg.e{background:#4a2323}.msg.s{background:#1d3a2a}
+.bar{height:8px;background:#555;border-radius:4px;overflow:hidden}.bar>div{height:100%;background:var(--acc2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+footer{text-align:center;padding:24px;color:var(--mut);font-size:13px}
+/* ===== DESIGN “STICKER”: tasti, carte, schermate ===== */
+body{font-family:"Space Grotesk",Arial,sans-serif}
+.wrap{max-width:900px}
+h1{font-size:34px;letter-spacing:-.5px}
+header{border-bottom:3px solid #000}
+.bottone{border:3px solid #000;border-radius:999px;padding:7px 16px;font-weight:700;font-family:inherit;box-shadow:3px 3px 0 #000;transition:transform .08s,box-shadow .08s}
+.bottone:active{transform:translate(3px,3px);box-shadow:none}
+.dropdown-content{border:3px solid #000;border-radius:14px;box-shadow:4px 4px 0 #000;overflow:hidden;background:#fff;margin-top:6px}
+.beta{border:2px solid #000}
+.card{border:2px solid var(--acc2);border-radius:18px;box-shadow:6px 6px 0 rgba(94,234,212,.3)}
+.btn{border:3px solid #000;border-radius:999px;padding:11px 22px;background:var(--acc2);color:#04201c;box-shadow:4px 4px 0 #000;font-weight:800;font-family:inherit;transition:transform .08s,box-shadow .08s}
+.btn:hover{filter:none;transform:translate(-1px,-1px);box-shadow:5px 5px 0 #000}
+.btn:active{transform:translate(4px,4px);box-shadow:none}
+.btn.sec{background:#fbbf24;color:#000}.btn.del{background:#fb7185;color:#000}.btn.vio{background:#a78bfa;color:#000}.btn.gry{background:#374151;color:#fff}
+.patente-categorie .cta-test{border:3px solid #000;border-radius:999px;box-shadow:4px 4px 0 #000;background:var(--acc2);color:#04201c;font-family:inherit}
+.opts{margin-top:8px}
+.opt{display:flex;align-items:center;gap:12px;border:3px solid #000;border-radius:16px;background:#fff;color:#0f1f1c;font-weight:700;font-family:inherit;padding:14px;box-shadow:4px 4px 0 #000;transition:transform .08s,box-shadow .08s}
+.opt:disabled{color:#0f1f1c;cursor:default}
+.opt:hover:not(:disabled){transform:translate(-1px,-1px)}
+.opt:active:not(:disabled){transform:translate(4px,4px);box-shadow:none}
+.opt .lt{font-style:normal;background:var(--acc);color:#fff;width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt.sel{background:var(--acc2)}.opt.ok{background:#86efac;border-color:#000}.opt.ko{background:#fda4af;border-color:#000}
+.opts.vf{display:grid;grid-template-columns:1fr 1fr;gap:14px}.opts.vf .opt{justify-content:center;margin:8px 0}
+.bar{height:16px;border:3px solid #000;border-radius:999px;background:#fff}.bar>div{background:var(--acc)}
+input,select,textarea{border:3px solid #000;border-radius:12px;background:#fff;color:#0f1f1c;font-weight:600}
+input[type=radio]{accent-color:var(--acc)}
+input:focus,select:focus,textarea:focus{outline:3px solid var(--acc2)}
+.msg{border:2px solid #000;color:#000}.msg.e{background:#fda4af}.msg.s{background:#86efac}
+/* HERO */
+.scroll-stage{height:400vh;position:relative}
+.hero-patente{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px}
+.logo-intro{position:absolute;font-size:48px;font-weight:bold;letter-spacing:1px;z-index:1;opacity:var(--logo-opacity,1);transform:scale(var(--logo-scale,1))}
+.patente-3d-wrapper{position:relative;width:600px;max-width:92vw;height:380px;opacity:var(--patente-opacity,0);transform:scale(var(--patente-scale,.3))}
+.faccia{width:100%;height:100%;border-radius:20px;background:linear-gradient(135deg,#e8e8e8,#c9d6e3 50%,#b8c9dc);box-shadow:0 20px 60px rgba(0,0,0,.5);border:2px solid #9aa8b8;padding:25px 30px;color:#1a1a2e}
+.patente-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1a1a2e;padding-bottom:8px;margin-bottom:15px}
+.titolo{font-size:18px;font-weight:bold}
+.paese{background:#003399;color:#ffcc00;font-size:11px;font-weight:bold;padding:4px 8px;border-radius:4px}
+.patente-corpo{display:flex;gap:20px}
+.patente-foto{width:110px;height:140px;background:repeating-linear-gradient(45deg,#ccc,#ccc 10px,#ddd 10px,#ddd 20px);border:2px solid #1a1a2e;border-radius:6px;flex-shrink:0}
+.patente-dati{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.riga{display:flex;gap:8px}.numero{font-weight:bold;width:22px;opacity:.6}.valore{font-weight:bold}
+.patente-categorie{position:relative;display:flex;gap:10px;margin-top:18px;padding-top:12px;border-top:1px solid #9aa8b8}
+.cat{width:42px;height:42px;border:2px solid #1a1a2e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:13px;background:rgba(255,255,255,.5)}
+.cta-test{position:absolute;left:50%;bottom:4px;transform:translate(-50%,0);width:calc(100% + 20px);max-width:320px;padding:14px 18px;font-size:15px;font-weight:bold;color:#fff;background:var(--acc);border:0;border-radius:10px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.4);opacity:var(--bottone-opacity,0);pointer-events:var(--bottone-pe,none)}
+.cta-test:hover{filter:brightness(1.15)}
+.scroll-hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:13px;opacity:var(--hint-opacity,.8);animation:rimbalza 1.5s ease-in-out infinite;pointer-events:none}
+@keyframes rimbalza{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+@media(max-width:520px){.patente-foto{width:80px;height:100px}.patente-dati{font-size:12px}.faccia{padding:16px}.logo-intro{font-size:34px}}
+</style>
+</head>
+<body>
+<header id="hd"></header>
+<div class="banner" id="bn"></div>
+<main id="app"></main>
+<footer id="ft"></footer>
+
+<script>
+/* ================================================================
+   CONFIGURAZIONE – modifica qui testi, quiz, soglie e categorie
+   ================================================================ */
+const CONFIG = {
+  nome: "Promosso",
+  dominio: "promossopatenti.it",
+  beta: true,
+  bannerBeta: "🚧 Sito in versione beta: stiamo ancora lavorando. Dicci cosa ne pensi nella pagina Feedback!",
+  simDomande: 30, simMinuti: 20, erroriMax: 3,   // simulazione d’esame
+  schede: [["B","B (auto)"],["AM","AM (ciclomotori)"],["A","A1, A2, A (moto)"],["BE","BE (auto + rimorchio)"]],
+  prezzi: { AM: 39.99, B: 59.99, BE: 69.99, A: 49.99 },   // prezzo della correzione; "A" vale per A1, A2 e A
+  linkPagamento: { AM: "", B: "", BE: "", A: "" },       // incolla qui i link di pagamento (es. Stripe Payment Link)
+  modalitaTest: true,                                     // true = pulsante “Simula acquisto” senza addebito: METTI false prima del lancio
+  adminHash: "43e540e21cb5ae8555717f28d6b00857674024d7a227f3efcc7f2c46b3cd588e",   // SHA-256 della password staff (Ctrl+F8)
+  // banca Vero/Falso: [argomento, affermazione, 1=Vero 0=Falso] – aggiungi qui nuove domande
+  bancaVF: [
+    ["Velocità","In autostrada il limite massimo per le autovetture è 130 km/h.",1],
+    ["Velocità","Nei centri abitati il limite generale è 70 km/h.",0],
+    ["Velocità","Sulle strade extraurbane secondarie il limite generale è 90 km/h.",1],
+    ["Velocità","Sulle strade extraurbane principali il limite generale è 110 km/h.",1],
+    ["Velocità","In caso di pioggia, in autostrada il limite per le auto scende a 110 km/h.",1],
+    ["Precedenza","A un incrocio privo di segnali ha la precedenza chi proviene da sinistra.",0],
+    ["Precedenza","Il segnale di STOP obbliga sempre a fermarsi prima della linea di arresto.",1],
+    ["Precedenza","In una rotatoria si dà la precedenza ai veicoli che percorrono già l’anello.",1],
+    ["Sicurezza","Le cinture di sicurezza vanno usate solo in autostrada.",0],
+    ["Sicurezza","Ai neopatentati, nei primi tre anni, è vietato guidare dopo aver assunto alcol.",1],
+    ["Sicurezza","Se si va piano, è consentito tenere il telefono in mano mentre si guida.",0],
+    ["Sicurezza","I bambini di statura inferiore a 150 cm devono usare un sistema di ritenuta adeguato.",1],
+    ["Sorpasso","Il sorpasso è vietato in prossimità di dossi senza visibilità.",1],
+    ["Sorpasso","Il sorpasso è consentito in presenza di una linea continua.",0],
+    ["Sorpasso","Prima di sorpassare bisogna segnalare la manovra con l’indicatore di direzione.",1],
+    ["Distanza","La distanza di sicurezza non dipende dalla velocità del veicolo.",0],
+    ["Distanza","Su fondo ghiacciato conviene frenare con forza e bruscamente.",0],
+    ["Segnali","Il segnale triangolare con bordo rosso indica pericolo.",1],
+    ["Segnali","Il segnale circolare con fondo blu indica obbligo.",1],
+    ["Segnali","Il segnale circolare con bordo rosso indica in genere un divieto.",1],
+    ["Documenti","La patente di categoria B si può conseguire dai 18 anni.",1],
+    ["Documenti","La patente ha un punteggio iniziale di 20 punti.",1],
+    ["Emergenza","Il triangolo di emergenza va posizionato a circa 50 m dal veicolo fermo.",1],
+    ["Emergenza","In galleria devono essere accese le luci anabbaglianti.",1]
+  ],
+  sogliaPromosso: 0.9,        // 0.9 = serve il 90% di risposte corrette
+  categorie: [
+    ["AM","Ciclomotori (da 14 anni)"],["A1","Moto fino a 125 cc"],["A2","Moto fino a 35 kW"],
+    ["A","Tutte le moto"],["B","Auto fino a 3,5 t"],["BE","Auto con rimorchio pesante"]
+  ],
+  quizBase: [
+    { id:"b1", titolo:"Quiz base – Categoria B", categoria:"B", autore:"Promosso", domande:[
+      { d:"Qual è il limite massimo di velocità per le autovetture in autostrada?", o:["110 km/h","130 km/h","150 km/h"], r:1 },
+      { d:"Qual è il limite generale di velocità nei centri abitati?", o:["30 km/h","50 km/h","70 km/h"], r:1 },
+      { d:"Qual è il limite generale sulle strade extraurbane secondarie?", o:["70 km/h","90 km/h","110 km/h"], r:1 },
+      { d:"Quale tasso alcolemico è consentito ai neopatentati (primi 3 anni)?", o:["0 g/l","0,5 g/l","0,8 g/l"], r:0 },
+      { d:"Chi deve usare le cinture di sicurezza?", o:["Solo chi guida","Solo chi siede davanti","Tutti gli occupanti dei posti che ne sono dotati"], r:2 },
+      { d:"Un segnale circolare con bordo rosso indica in genere:", o:["Pericolo","Divieto","Obbligo"], r:1 },
+      { d:"A un incrocio senza segnali, chi ha la precedenza?", o:["Chi viene da sinistra","Chi viene da destra","Il veicolo più grande"], r:1 },
+      { d:"Il sorpasso è vietato…", o:["In prossimità di curve senza visibilità","Sempre di giorno","Solo in autostrada"], r:0 },
+      { d:"Durante la guida l’uso del telefono è consentito…", o:["Tenendolo in mano se si va piano","Solo con vivavoce o auricolare","Sempre"], r:1 },
+      { d:"Fuori dai centri abitati, i neopatentati in autostrada non devono superare…", o:["100 km/h","110 km/h","130 km/h"], r:0 }
+    ]}
+  ]
+};
+
+/* Logo del sito (PNG trasparente incorporato). Per cambiarlo sostituisci questa stringa data: */
+const LOGO = "data:image/png;base64,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";
+
+/* ============================ UTILITÀ ============================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ls = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } };
+const sv = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+async function hash(t) {
+  try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+    return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,"0")).join(""); }
+  catch (e) { return btoa(t); }
+}
+const utenti = () => ls("pp_utenti", {});
+const sessione = () => ls("pp_sessione", null);
+const utente = () => { const s = sessione(); return s ? utenti()[s] : null; };
+const tuttiQuiz = () => CONFIG.quizBase.concat(ls("pp_quiz", []));
+let run = null, flash = "";
+
+/* ============================ PAGINE ============================ */
+const pagine = {
+  home() {
+    return `<div class="scroll-stage" id="scrollStage"><section class="hero-patente" id="heroPatente">
+      <div class="logo-intro">${esc(CONFIG.nome)}.it</div>
+      <div class="patente-3d-wrapper"><div class="faccia">
+        <div class="patente-header"><div class="titolo">PATENTE DI GUIDA (fac-simile)</div><div class="paese">IT</div></div>
+        <div class="patente-corpo"><div class="patente-foto"></div><div class="patente-dati">
+          <div class="riga"><span class="numero">1.</span><span class="valore">Esempio</span></div>
+          <div class="riga"><span class="numero">2.</span><span class="valore">Esempio</span></div>
+          <div class="riga"><span class="numero">3.</span><span class="valore">Esempio, 01.01.2000</span></div>
+          <div class="riga"><span class="numero">4a.</span><span class="valore">01.01.2024</span></div>
+          <div class="riga"><span class="numero">4b.</span><span class="valore">01.01.2034</span></div>
+          <div class="riga"><span class="numero">5.</span><span class="valore">ESEMPIO000000</span></div></div></div>
+        <div class="patente-categorie">${["AM","A1","A2","B","BE"].map(c => `<div class="cat">${c}</div>`).join("")}
+          <button class="cta-test" onclick="location.hash='quiz'">Fai il tuo test di guida!</button></div>
+      </div></div>
+      <div class="scroll-hint">▼ scorri per continuare</div></section></div>
+      <div class="wrap"><h1>Dalla teoria alla patente, con calma e metodo</h1>
+      <div class="grid">
+        <div class="card"><h2>📝 Quiz</h2><p>Allenati con quiz ufficiali e della community.</p><a href="#quiz">Vai ai quiz</a></div>
+        <div class="card"><h2>✏️ Crea</h2><p>Scrivi il tuo quiz e usalo per studiare.</p><a href="#crea">Crea un quiz</a></div>
+        <div class="card"><h2>📖 Manuale</h2><p>Capitoli brevi per capire, non solo memorizzare.</p><a href="#manuale">Leggi</a></div>
+        <div class="card"><h2>🧪 Strumenti</h2><p>Stima alcolemia e prova i tuoi tempi di reazione.</p><a href="#reazione">Provali</a></div>
+        <div class="card"><h2>💬 Feedback</h2><p>Il sito è in beta: aiutaci a migliorarlo.</p><a href="#feedback">Scrivi un parere</a></div>
+      </div></div>`;
+  },
+  come() {
+    return `<div class="wrap"><h1>Come funziona</h1><div class="card"><ol>
+      <li>Registrati (gratis) per salvare i tuoi risultati.</li><li>Scegli un quiz e rispondi alle domande.</li>
+      <li>Consegna il quiz e vedi il punteggio. Sblocca la correzione per rivedere gli errori e l’esito Promosso/Bocciato.</li>
+      <li>Crea quiz personali per ripassare gli argomenti difficili.</li></ol>
+      <p class="mut">Promosso se rispondi correttamente ad almeno il ${Math.round(CONFIG.sogliaPromosso*100)}% delle domande.</p></div></div>`;
+  },
+  categorie() {
+    return `<div class="wrap"><h1>Categorie di patente</h1><div class="grid">${CONFIG.categorie.map(c =>
+      `<div class="card"><h2>${esc(c[0])}</h2><p>${esc(c[1])}</p></div>`).join("")}</div></div>`;
+  },
+  cosa() {
+    return `<div class="wrap"><h1>Cosa sono i test</h1><div class="card"><p>Sono quiz a risposta multipla sul Codice della Strada, simili a quelli dell’esame teorico. Ogni domanda ha una sola risposta corretta.</p>
+      <p class="mut">I contenuti sono a scopo di studio e possono non coincidere con i quiz ufficiali del Ministero.</p><a class="btn" href="#quiz" style="text-decoration:none;display:inline-block">Inizia</a></div></div>`;
+  },
+  quiz() {
+    if (run) return vistaQuiz();
+    const u = utente();
+    return `<div class="wrap"><h1>Quiz patente</h1>${tuttiQuiz().map(q => `<div class="card"><div class="row">
+      <div style="flex:1"><h2 style="margin:0">${esc(q.titolo)}</h2><span class="mut">Cat. ${esc(q.categoria)} · ${q.domande.length} domande · di ${esc(q.autore)}</span></div>
+      <button class="btn" onclick="startQuiz('${q.id}')">Inizia</button></div></div>`).join("")}
+      ${u ? "" : `<p class="mut">💡 <a href="#login">Accedi</a> per salvare i tuoi risultati.</p>`}</div>`;
+  },
+  crea() {
+    const u = utente();
+    if (!u) return `<div class="wrap"><div class="card"><h1>Crea un quiz</h1><p>Devi essere registrato per creare quiz.</p><a class="btn" style="text-decoration:none;display:inline-block" href="#login">Accedi / Registrati</a></div></div>`;
+    setTimeout(() => { if (!$("#blocchi").children.length) addQ(); }, 0);
+    return `<div class="wrap"><h1>Crea il tuo quiz</h1><div class="card">
+      <label>Titolo</label><input id="qt" maxlength="80" placeholder="Es. Segnali di precedenza">
+      <label>Categoria</label><select id="qc">${CONFIG.categorie.map(c => `<option>${esc(c[0])}</option>`).join("")}</select></div>
+      <div id="blocchi"></div><div class="row"><button class="btn sec" onclick="addQ()">+ Aggiungi domanda</button><button class="btn" onclick="salvaQuiz()">Salva quiz</button></div>
+      <div id="cm"></div><p class="mut">I quiz sono salvati in questo browser.</p></div>`;
+  },
+  feedback() {
+    const fb = ls("pp_feedback", []), u = utente();
+    const media = fb.length ? (fb.reduce((a, f) => a + f.voto, 0) / fb.length).toFixed(1) : "–";
+    return `<div class="wrap"><h1>Feedback sul sito</h1><div class="card">${flash}
+      <label>Voto</label><select id="fv"><option value="5">★★★★★ Ottimo</option><option value="4">★★★★ Buono</option><option value="3">★★★ Discreto</option><option value="2">★★ Scarso</option><option value="1">★ Pessimo</option></select>
+      <label>Nome (facoltativo)</label><input id="fn" maxlength="40" value="${u ? esc(u.nome) : ""}">
+      <label>Il tuo messaggio</label><textarea id="ft2" rows="4" maxlength="600" placeholder="Bug, idee, cosa manca…"></textarea>
+      <button class="btn" onclick="inviaFeedback()">Invia</button></div>
+      <h2>Opinioni (${fb.length}) · media ${media}</h2>${fb.slice().reverse().slice(0, 20).map(f => `<div class="card"><b>${esc(f.nome || "Anonimo")}</b> · ${"★".repeat(f.voto)}<br>${esc(f.testo)}<div class="mut">${esc(f.data)}</div></div>`).join("")}</div>`;
+  },
+  login() {
+    if (utente()) { location.hash = "profilo"; return ""; }
+    return `<div class="wrap"><div class="grid">
+      <div class="card"><h2>Accedi</h2>${flash}<input id="le" type="email" placeholder="Email" autocomplete="email"><input id="lp" type="password" placeholder="Password" autocomplete="current-password"><button class="btn" onclick="doLogin()">Accedi</button></div>
+      <div class="card"><h2>Registrati</h2><input id="rn" placeholder="Nome" maxlength="40"><input id="re" type="email" placeholder="Email" autocomplete="email"><input id="rp" type="password" placeholder="Password (min. 6 caratteri)" autocomplete="new-password"><button class="btn" onclick="doReg()">Crea account</button></div></div>
+      <p class="mut">Beta: gli account sono salvati solo in questo browser (nessun server).</p></div>`;
+  },
+  profilo() {
+    const u = utente(); if (!u) { location.hash = "login"; return ""; }
+    const mie = ls("pp_quiz", []).filter(q => q.email === u.email), ris = (u.risultati || []).slice().reverse();
+    return `<div class="wrap"><h1>Ciao, ${esc(u.nome)} 👋</h1><div class="card"><h2>Ultimi risultati</h2>${ris.length ? ris.slice(0, 10).map(r =>
+      `<div>${esc(r.titolo)} – <b>${r.pt}/${r.tot}</b> ${sbloccatoCat(r.cat || "B") ? (r.ok ? "✅ Promosso" : "❌ Bocciato") : "🔒"} <span class="mut">${esc(r.data)}</span></div>`).join("") : "<p class='mut'>Nessun quiz svolto.</p>"}</div>
+      ${statHtml(u)}<div class="card"><h2>I miei quiz</h2>${mie.length ? mie.map(q => `<div class="row" style="margin:6px 0"><span style="flex:1">${esc(q.titolo)} (${q.domande.length})</span><button class="btn sec" onclick="startQuiz('${q.id}')">Prova</button><button class="btn del" onclick="delQuiz('${q.id}')">Elimina</button></div>`).join("") : "<p class='mut'>Non hai ancora creato quiz.</p>"}</div>
+      <button class="btn sec" onclick="logout()">Esci</button></div>`;
+  }
+};
+/* ===== SIMULAZIONE, ARGOMENTI, STATISTICHE ===== */
+const conv = x => ({ d: x[1], o: ["Vero", "Falso"], r: x[2] ? 0 : 1, a: x[0] });
+const nSim = () => Math.min(CONFIG.simDomande, CONFIG.bancaVF.length);
+const argomenti = () => [...new Set(CONFIG.bancaVF.map(x => x[0]))];
+const mmss = () => { const s = Math.max(0, Math.round((run.fin - Date.now()) / 1000)); return "⏱ " + Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+function avvia(q) {
+  clearInterval(window._t);
+  run = { q, i: 0, pt: 0, sel: null, fine: false, err: [], log: [], fin: Date.now() + CONFIG.simMinuti * 60000, t0: Date.now() };
+  if (q.sim) window._t = setInterval(tick, 1000);
+  location.hash = "quiz"; draw();
+}
+function tick() {
+  if (!run || run.fine) { clearInterval(window._t); return; }
+  if (run.fin - Date.now() <= 0) {
+    const n = run.q.domande.length; for (let j = run.i + (run.sel === null ? 0 : 1); j < n; j++) run.err.push(run.q.domande[j]);
+    run.timeout = true; run.i = n - 1; run.sel = -1; avanti(); return;
+  }
+  const t = $("#tm"); if (t) t.textContent = mmss();
+}
+function avviaSim(cat) {
+  const d = CONFIG.bancaVF.slice().sort(() => Math.random() - .5).slice(0, nSim()).map(conv);
+  avvia({ id: "sim", titolo: "Simulazione esame – Patente " + cat, categoria: cat, autore: "Promosso", sim: true, erroriMax: CONFIG.erroriMax, domande: d });
+}
+function avviaArg(i) {
+  const a = argomenti()[i];
+  avvia({ id: "arg" + i, titolo: "Argomento: " + a, categoria: catCorrente, autore: "Promosso", domande: CONFIG.bancaVF.filter(x => x[0] === a).map(conv) });
+}
+function startErrori() {
+  const u = utente(), d = CONFIG.bancaVF.map(conv).filter(x => (u.err || []).includes(x.d)); if (!d.length) return;
+  avvia({ id: "err", titolo: "Ripasso dei miei errori", categoria: catCorrente, autore: "Tu", domande: d });
+}
+function riprova() {
+  const q = run.q; if (q.sim) return avviaSim(q.categoria);
+  if (q.id === "err") return startErrori();
+  if (q.id.startsWith("arg")) return avviaArg(+q.id.slice(3));
+  startQuiz(q.id);
+}
+function promosso() {
+  const n = run.q.domande.length, e = n - run.pt;
+  return run.q.erroriMax !== undefined ? e <= run.q.erroriMax : run.pt / n >= CONFIG.sogliaPromosso;
+}
+function ripasso() {
+  if (!run.err.length) return "";
+  return `<div style="text-align:left"><h3>Da ripassare (${run.err.length})</h3>${run.err.map(d => `<div class="card" style="margin:8px 0">${esc(d.d)}<br><b>✔ ${esc(d.o[d.r])}</b></div>`).join("")}</div>`;
+}
+function stat() {
+  const s = sessione(); if (!s) return; const us = utenti(), u = us[s]; u.stat = u.stat || {}; u.err = u.err || [];
+  run.log.forEach(([a, g]) => { if (a) { const x = u.stat[a] = u.stat[a] || [0, 0]; x[0]++; if (g) x[1]++; } });
+  run.q.domande.forEach(d => { u.err = u.err.filter(t => t !== d.d); });
+  run.err.forEach(d => { if (!u.err.includes(d.d)) u.err.push(d.d); });
+  sv("pp_utenti", us);
+}
+function statHtml(u) {
+  const r = u.risultati || [], st = u.stat || {}, er = u.err || [];
+  const m = r.length ? Math.round(r.reduce((a, x) => a + x.pt / x.tot, 0) / r.length * 100) : 0;
+  return `<div class="card"><h2>Statistiche</h2><p>Quiz svolti: <b>${r.length}</b> · Media: <b>${m}%</b> · Errori da ripassare: <b>${er.length}</b></p>${Object.entries(st).map(([a, v]) => `<div class="mut">${esc(a)} – ${Math.round(v[1] / v[0] * 100)}% (${v[1]}/${v[0]})</div><div class="bar" style="margin:3px 0 8px"><div style="width:${v[1] / v[0] * 100}%"></div></div>`).join("")}${er.length ? `<button class="btn" onclick="startErrori()">Ripassa i miei errori</button>` : ""}</div>`;
+}
+pagine.quiz = function () {
+  if (run) return vistaQuiz();
+  return `<div class="wrap"><h1>Quiz patente online</h1>
+    <div class="card"><b>Simulazione d’esame</b><p class="mut">${nSim()} domande Vero/Falso estratte a caso · ${CONFIG.simMinuti} minuti · promosso con al massimo ${CONFIG.erroriMax} errori.</p></div>
+    <div class="grid">${CONFIG.schede.map(s => `<div class="card"><h2>Quiz Patente ${esc(s[1])}</h2><div style="display:flex;flex-direction:column;gap:8px">
+      <button class="btn" onclick="avviaSim('${esc(s[0])}')">Simulazione esame</button>
+      <button class="btn sec" onclick="catCorrente='${esc(s[0])}';location.hash='argomenti'">Quiz per argomento</button>
+      <button class="btn vio" onclick="popupRisposte('${esc(s[0])}')">Vedi Risposte Esatte del Quiz</button><button class="btn gry" onclick="location.hash='cronologia'">Cronologia Quiz</button></div></div>`).join("")}</div>
+    <h2>Altri quiz</h2>${tuttiQuiz().map(q => `<div class="card"><div class="row"><div style="flex:1"><h3 style="margin:0">${esc(q.titolo)}</h3><span class="mut">Cat. ${esc(q.categoria)} · ${q.domande.length} domande · di ${esc(q.autore)}</span></div><button class="btn" onclick="startQuiz('${q.id}')">Inizia</button></div></div>`).join("")}
+    ${utente() ? "" : `<p class="mut">💡 <a href="#login">Accedi</a> per salvare errori e statistiche.</p>`}</div>`;
+};
+pagine.argomenti = () => `<div class="wrap"><h1>Quiz per argomento</h1><div class="grid">${argomenti().map((a, i) => `<div class="card"><h2>${esc(a)}</h2><p class="mut">${CONFIG.bancaVF.filter(x => x[0] === a).length} domande</p><button class="btn" onclick="avviaArg(${i})">Inizia</button></div>`).join("")}</div></div>`;
+pagine.risposte = () => `<div class="wrap"><h1>Tutte le risposte</h1>${argomenti().map(a => `<div class="card"><h2>${esc(a)}</h2>${CONFIG.bancaVF.filter(x => x[0] === a).map(x => `<p>${x[2] ? "✅ Vero" : "❌ Falso"} – ${esc(x[1])}</p>`).join("")}</div>`).join("")}</div>`;
+/* ===== MANUALE, ALCOL TEST, TEMPI DI REAZIONE ===== */
+// Modifica o aggiungi capitoli: ["Titolo", "Testo"]
+const MANUALE = [
+  ["Segnali stradali", "I segnali si dividono in pericolo (triangolari), divieto (circolari con bordo rosso), obbligo (circolari blu) e indicazione. In caso di contrasto prevalgono gli ordini degli agenti del traffico, poi semafori e segnali, infine le norme generali."],
+  ["Precedenza", "Senza segnali si dà la precedenza a chi arriva da destra. Lo STOP impone di fermarsi sempre; il segnale di dare precedenza di rallentare e dare strada. In rotatoria passa chi è già nell’anello. I veicoli di emergenza con sirena e lampeggiante hanno la precedenza."],
+  ["Velocità e distanze", "Limiti generali per le auto: 50 km/h in centro abitato, 90 su extraurbane secondarie, 110 su extraurbane principali, 130 in autostrada (110 con pioggia). Per i neopatentati nei primi tre anni: 100 km/h in autostrada e 90 su extraurbane principali. Lo spazio di arresto è la somma di spazio di reazione e spazio di frenata: cresce molto con la velocità."],
+  ["Alcol e sicurezza", "Il limite generale è 0,5 g/l. È 0 per neopatentati (primi 3 anni), under 21 e conducenti professionali. Le cinture sono obbligatorie per tutti i posti che ne sono dotati; i bambini sotto i 150 cm usano un sistema di ritenuta adatto. Il telefono in mano alla guida è vietato."]
+];
+pagine.manuale = () => `<div class="wrap"><h1>Manuale di teoria</h1><p class="mut">Riassunto per iniziare: non sostituisce un manuale completo.</p>${MANUALE.map(m => `<details class="card"><summary><b>${esc(m[0])}</b></summary><p>${esc(m[1])}</p><a href="#argomenti">Allenati sugli argomenti →</a></details>`).join("")}</div>`;
+pagine.alcol = () => `<div class="wrap"><h1>Alcol test (stima)</h1><div class="card"><div class="grid">
+  <div><label>Peso (kg)</label><input id="ap" type="number" value="70" min="30"></div>
+  <div><label>Sesso</label><select id="as"><option value="0.68">Uomo</option><option value="0.55">Donna</option></select></div>
+  <div><label>Drink (1 = una birra media o un calice di vino)</label><input id="ad" type="number" value="2" min="0"></div>
+  <div><label>Ore dall’ultimo drink</label><input id="ah" type="number" value="1" min="0" step="0.5"></div></div>
+  <button class="btn" onclick="calcAlcol()">Calcola</button><div id="ar"></div></div>
+  <p class="mut">Stima indicativa con la formula di Widmark: ogni persona è diversa e non va usata per decidere se mettersi alla guida. Se hai bevuto, non guidare.</p></div>`;
+function calcAlcol() {
+  const w = +$("#ap").value, r = +$("#as").value, d = +$("#ad").value, h = +$("#ah").value; if (!(w > 0)) return;
+  const g = Math.max(0, d * 12 / (r * w) - 0.15 * h);
+  const m = g === 0 ? "Stima: 0 g/l." : g < 0.5 ? "Sotto il limite generale di 0,5 g/l, ma sopra lo zero: vietato per neopatentati, under 21 e professionisti." : "Sopra il limite di 0,5 g/l: non guidare.";
+  $("#ar").innerHTML = `<div class="msg ${g >= 0.5 ? "e" : "s"}"><b>${g.toFixed(2).replace(".", ",")} g/l</b> – ${m}</div>`;
+}
+let rz = { s: 0, t: null, t0: 0, res: [] };
+pagine.reazione = () => { rz.s = 0; clearTimeout(rz.t); return `<div class="wrap"><h1>Tempi di reazione</h1><div class="card">
+  <div id="rz" onclick="rzClick()" style="height:200px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#555;cursor:pointer;font-size:20px;user-select:none;text-align:center">Clicca per iniziare</div>
+  <p id="rr" class="mut"></p></div><p class="mut">Quando il riquadro diventa verde, clicca il più in fretta possibile. A 50 km/h in 1 secondo percorri circa 14 metri.</p></div>`; };
+function rzClick() {
+  const b = $("#rz");
+  if (rz.s === 0) { rz.s = 1; b.style.background = "#a33"; b.textContent = "Aspetta il verde…";
+    rz.t = setTimeout(() => { rz.s = 2; rz.t0 = performance.now(); b.style.background = "#2e9e5b"; b.textContent = "ORA! Clicca!"; }, 1000 + Math.random() * 3000); }
+  else if (rz.s === 1) { clearTimeout(rz.t); rz.s = 0; b.style.background = "#555"; b.textContent = "Troppo presto! Clicca per riprovare"; }
+  else { const ms = Math.round(performance.now() - rz.t0); rz.res.push(ms); rz.s = 0; b.style.background = "#555"; b.textContent = ms + " ms – clicca per riprovare";
+    $("#rr").textContent = "Media: " + Math.round(rz.res.reduce((a, x) => a + x, 0) / rz.res.length) + " ms su " + rz.res.length + " prove"; }
+}
+/* ===== CORREZIONE A PAGAMENTO + ACCESSO STAFF ===== */
+let catCorrente = "B";
+const chiave = c => ["A1", "A2", "A"].includes(c) ? "A" : (CONFIG.prezzi[c] ? c : "B");
+const euro = n => n.toFixed(2).replace(".", ",") + " €";
+const isAdmin = () => ls("pp_admin", false) === true;
+const sbloccatoCat = c => isAdmin() || ((utente() || {}).acquisti || []).includes(chiave(c));
+const sbloccato = q => sbloccatoCat(q.categoria);
+function lockHtml(q) {
+  const k = chiave(q.categoria), s = CONFIG.schede.find(x => x[0] === k);
+  return `<div class="card" style="margin:12px 0"><h3>🔒 Correzione bloccata</h3><p class="mut">Sblocca per vedere l’esito Promosso/Bocciato e rivedere le risposte sbagliate.</p><button class="btn" onclick="popupRisposte('${k}')">Sblocca Patente ${esc(s ? s[1] : k)} · ${euro(CONFIG.prezzi[k])}</button></div>`;
+}
+function modal(h) {
+  chiudi(); const d = document.createElement("div"); d.id = "md";
+  d.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px";
+  d.innerHTML = `<div class="card" style="max-width:420px;width:100%;text-align:left">${h}</div>`;
+  d.addEventListener("click", e => { if (e.target === d) chiudi(); }); document.body.appendChild(d);
+}
+function chiudi() { const d = $("#md"); if (d) d.remove(); }
+function apriAcquisto(k) {
+  if (!utente()) return modal(`<h2>Accedi per acquistare</h2><p class="mut">Serve un account per collegare l’acquisto.</p><div class="row"><a class="btn" style="text-decoration:none" href="#login" onclick="chiudi()">Accedi / Registrati</a><button class="btn sec" onclick="chiudi()">Chiudi</button></div>`);
+  const link = CONFIG.linkPagamento[k];
+  if (link) { window.open(link, "_blank"); chiudi(); }
+  else if (CONFIG.modalitaTest) acquista(k);
+  else modal(`<h2>Pagamenti in arrivo</h2><p class="mut">L’acquisto non è ancora attivo.</p><button class="btn sec" onclick="chiudi()">Chiudi</button>`);
+}
+function popupRisposte(k) {
+  const s = CONFIG.schede.find(x => x[0] === k), nome = s ? s[1] : k;
+  if (sbloccatoCat(k)) { catCorrente = k; location.hash = "risposte"; return; }
+  modal(`<h2>${euro(CONFIG.prezzi[k])} per sbloccare le risposte del Quiz Patente ${esc(nome)}!</h2>${CONFIG.modalitaTest ? '<div class="msg s">MODALITÀ TEST: nessun addebito.</div>' : ""}<div class="row"><button class="btn" onclick="apriAcquisto('${k}')">ACQUISTA</button><button class="btn sec" onclick="chiudi()">Annulla</button></div>`);
+}
+function acquista(k) {
+  const us = utenti(), u = us[sessione()]; u.acquisti = [...new Set([...(u.acquisti || []), k])]; sv("pp_utenti", us); chiudi(); draw();
+}
+document.addEventListener("keydown", e => { if (e.ctrlKey && e.key === "F8") { e.preventDefault(); apriAdmin(); } });
+function apriAdmin() {
+  if (isAdmin()) return modal(`<h2>👑 Modalità staff attiva</h2><div class="row"><button class="btn sec" onclick="uscAdmin()">Disattiva</button><button class="btn" onclick="chiudi()">Chiudi</button></div>`);
+  modal(`<h2>Accesso staff</h2><input id="apw" type="password" placeholder="Password admin" autocomplete="off"><div id="aem"></div><div class="row"><button class="btn" onclick="loginAdmin()">Entra</button><button class="btn sec" onclick="chiudi()">Annulla</button></div>`);
+  setTimeout(() => { const i = $("#apw"); if (i) { i.focus(); i.addEventListener("keydown", e => { if (e.key === "Enter") loginAdmin(); }); } }, 0);
+}
+async function loginAdmin() {
+  if (await hash($("#apw").value) === CONFIG.adminHash) { sv("pp_admin", true); chiudi(); draw(); }
+  else $("#aem").innerHTML = `<div class="msg e">Password errata.</div>`;
+}
+function uscAdmin() { try { localStorage.removeItem("pp_admin"); } catch (e) {} chiudi(); draw(); }
+const _risp = pagine.risposte;
+pagine.risposte = () => sbloccatoCat(catCorrente) ? _risp().replace(/<\/div>$/, `<button class="btn gry" onclick="location.hash='cronologia'">Cronologia Quiz</button></div>`) : `<div class="wrap"><div class="card"><h1>🔒 Risposte</h1><p>La correzione è disponibile solo al termine di ogni quiz, dopo averlo consegnato.</p><a class="btn" style="text-decoration:none;display:inline-block" href="#quiz">Vai ai quiz</a></div></div>`;
+/* ===== CRONOLOGIA QUIZ ===== */
+const fmtT = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+pagine.cronologia = () => {
+  const u = utente();
+  if (!u) return `<div class="wrap"><div class="card"><h1>Cronologia Quiz</h1><p>Accedi per vedere i quiz completati.</p><a class="btn" style="text-decoration:none;display:inline-block" href="#login">Accedi / Registrati</a></div></div>`;
+  const r = (u.risultati || []).slice().reverse(), ne = x => x.err ?? (x.tot - x.pt), tot = r.reduce((a, x) => a + ne(x), 0);
+  return `<div class="wrap"><h1>Cronologia Quiz</h1><div class="card"><b>Quiz completati: ${r.length}</b> · <b>Errori totali: ${tot}</b></div>` +
+    (r.length ? r.map(x => `<div class="card"><div class="row"><b style="flex:1">${esc(x.titolo)}</b><span class="mut">${esc(x.data)}</span></div>
+      <p>Punteggio: <b>${x.pt}/${x.tot}</b> · Errori: <b>${ne(x)}</b> · Esito: ${sbloccatoCat(x.cat || "B") ? (x.ok ? "✅ Promosso" : "❌ Bocciato") : "🔒"}</p>
+      <p class="mut">⏱ Tempo impiegato: ${x.sec != null ? fmtT(x.sec) : "–"} · Tempo rimasto: ${x.rim != null ? fmtT(x.rim) : "–"}</p></div>`).join("") : `<p class="mut">Non hai ancora completato quiz.</p>`) + `</div>`;
+};
+const rotte = { home:"home", "come-funziona":"come", categorie:"categorie", "cosa-sono":"cosa", quiz:"quiz", argomenti:"argomenti", risposte:"risposte", manuale:"manuale", alcol:"alcol", reazione:"reazione", crea:"crea", cronologia:"cronologia", feedback:"feedback", login:"login", profilo:"profilo" };
+
+/* ============================ QUIZ ============================ */
+function startQuiz(id) { const q = tuttiQuiz().find(x => x.id === id); if (!q) return; avvia(q); }
+function vistaQuiz() {
+  const { q, i, sel } = run;
+  if (run.fine) { const ok = promosso();
+    return `<div class="wrap"><div class="card" style="text-align:center"><h1>${sbloccato(q) ? (ok ? "🎉 Promosso!" : "❌ Bocciato") : "Quiz consegnato ✅"}</h1><h2>${run.pt} / ${q.domande.length} risposte corrette</h2>
+    <p class="mut">${run.timeout ? "⏱ Tempo scaduto. " : ""}${sbloccato(q) ? (ok ? "Ottimo lavoro!" : "Ripassa e riprova.") : ""}</p>${sbloccato(q) ? ripasso() : lockHtml(q)}${utente() ? "" : `<p class="mut"><a href="#login">Accedi</a> per salvare i risultati.</p>`}
+    <div class="row" style="justify-content:center"><button class="btn" onclick="riprova()">Riprova</button><button class="btn sec" onclick="run=null;draw()">Altri quiz</button></div></div></div>`; }
+  const d = q.domande[i];
+  return `<div class="wrap"><div class="row"><b style="flex:1">${esc(q.titolo)}</b><span id="tm" class="mut">${q.sim ? mmss() : ""}</span><button class="btn sec" onclick="clearInterval(window._t);run=null;draw()">Esci</button></div>
+    <div class="bar" style="margin:10px 0"><div style="width:${i / q.domande.length * 100}%"></div></div>
+    <div class="card"><div class="mut">Domanda ${i + 1} di ${q.domande.length}</div><h2>${esc(d.d)}</h2>
+    <div class="opts${d.o.length === 2 ? " vf" : ""}">${d.o.map((t, k) => `<button class="opt ${k === sel ? "sel" : ""}" ${sel !== null ? "disabled" : ""} onclick="rispondi(${k})"><i class="lt">${"ABCD"[k]}</i>${esc(t)}</button>`).join("")}
+    </div>${sel !== null ? `<button class="btn" onclick="avanti()">${i + 1 < q.domande.length ? "Avanti" : "Vedi risultato"}</button>` : ""}</div></div>`;
+}
+function rispondi(k) { if (run.sel !== null) return; run.sel = k; const d = run.q.domande[run.i], g = k === d.r; if (g) run.pt++; else run.err.push(d); run.log.push([d.a, g]); draw(); }
+function avanti() {
+  run.i++; run.sel = null;
+  if (run.i >= run.q.domande.length) { run.fine = true; clearInterval(window._t); stat();
+    const s = sessione(); if (s) { const us = utenti(); us[s].risultati = (us[s].risultati || []).concat({ titolo: run.q.titolo, pt: run.pt, tot: run.q.domande.length, ok: promosso(), cat: run.q.categoria, err: run.q.domande.length - run.pt, sec: Math.round((Date.now() - run.t0) / 1000), rim: run.q.sim ? Math.max(0, Math.round((run.fin - Date.now()) / 1000)) : null, data: new Date().toLocaleDateString("it-IT") }); sv("pp_utenti", us); } }
+  draw();
+}
+let nq = 0;
+function addQ() {
+  nq++; const n = nq, div = document.createElement("div"); div.className = "card"; div.dataset.q = "1";
+  div.innerHTML = `<b>Domanda</b><input class="qd" maxlength="250" placeholder="Testo della domanda">` + [0, 1, 2, 3].map(k =>
+    `<label class="row" style="flex-wrap:nowrap"><input type="radio" name="r${n}" value="${k}" ${k === 0 ? "checked" : ""}><input class="qo" maxlength="150" placeholder="Risposta ${k + 1}${k < 2 ? "" : " (facoltativa)"}" style="margin:5px 0"></label>`).join("") +
+    `<span class="mut">Seleziona il pallino della risposta corretta.</span> <button class="btn del" style="padding:5px 10px" onclick="this.parentNode.remove()">Rimuovi</button>`;
+  $("#blocchi").appendChild(div);
+}
+function salvaQuiz() {
+  const u = utente(), titolo = $("#qt").value.trim(), cm = $("#cm"), domande = [];
+  for (const b of document.querySelectorAll("[data-q]")) {
+    const d = b.querySelector(".qd").value.trim(), ops = [...b.querySelectorAll(".qo")].map(x => x.value.trim());
+    const sel = +b.querySelector("input[type=radio]:checked").value; if (!d) continue;
+    const o = [], idx = {}; ops.forEach((t, k) => { if (t) { idx[k] = o.length; o.push(t); } });
+    if (o.length < 2 || idx[sel] === undefined) { cm.innerHTML = `<div class="msg e">Ogni domanda ha bisogno di almeno 2 risposte e di una risposta corretta compilata.</div>`; return; }
+    domande.push({ d, o, r: idx[sel] });
+  }
+  if (!titolo || !domande.length) { cm.innerHTML = `<div class="msg e">Inserisci un titolo e almeno una domanda.</div>`; return; }
+  const q = ls("pp_quiz", []); q.push({ id: "u" + Date.now(), titolo, categoria: $("#qc").value, autore: u.nome, email: u.email, domande }); sv("pp_quiz", q);
+  flash = ""; location.hash = "quiz"; draw();
+}
+function delQuiz(id) { if (confirm("Eliminare il quiz?")) { sv("pp_quiz", ls("pp_quiz", []).filter(q => q.id !== id)); draw(); } }
+
+/* ===================== FEEDBACK, LOGIN, REGISTRAZIONE ===================== */
+function inviaFeedback() {
+  const t = $("#ft2").value.trim(); if (t.length < 3) { flash = `<div class="msg e">Scrivi almeno qualche parola.</div>`; draw(); flash = ""; return; }
+  const fb = ls("pp_feedback", []); fb.push({ voto: +$("#fv").value, nome: $("#fn").value.trim(), testo: t, data: new Date().toLocaleString("it-IT") }); sv("pp_feedback", fb);
+  flash = `<div class="msg s">Grazie per il tuo feedback! 💙</div>`; draw(); flash = "";
+}
+async function doReg() {
+  const n = $("#rn").value.trim(), e = $("#re").value.trim().toLowerCase(), p = $("#rp").value, us = utenti();
+  if (!n || !/^\S+@\S+\.\S+$/.test(e) || p.length < 6) return err("Controlla nome, email e password (min. 6 caratteri).");
+  if (us[e]) return err("Esiste già un account con questa email.");
+  us[e] = { nome: n, email: e, pw: await hash(p), risultati: [] }; sv("pp_utenti", us); sv("pp_sessione", e); location.hash = "profilo"; draw();
+}
+async function doLogin() {
+  const e = $("#le").value.trim().toLowerCase(), u = utenti()[e];
+  if (!u || u.pw !== await hash($("#lp").value)) return err("Email o password errata.");
+  sv("pp_sessione", e); location.hash = "profilo"; draw();
+}
+function err(m) { flash = `<div class="msg e">${m}</div>`; const s = flash; draw(); flash = ""; }
+function logout() { try { localStorage.removeItem("pp_sessione"); } catch (e) {} location.hash = "home"; draw(); }
+
+/* ============================ SHELL / ROUTER ============================ */
+function shell() {
+  const u = utente();
+  $("#hd").innerHTML = `<p style="display:flex;align-items:center;gap:4px"><a href="#home" aria-label="${esc(CONFIG.nome)}" style="display:block"><img src="${LOGO}" alt="Promosso Patenti" style="height:76px;width:auto;display:block"></a>${CONFIG.beta ? '<span class="beta">BETA</span>' : ""}${isAdmin() ? '<span class="beta" style="background:#fb7185">STAFF</span>' : ""}</p>
+    <div class="dropdown"><button class="bottone">Cosa è</button><div class="dropdown-content"><a href="#come-funziona">Come funziona</a><a href="#categorie">Categorie Patenti</a></div></div>
+    <div class="dropdown"><button class="bottone">I Test</button><div class="dropdown-content"><a href="#quiz">Quiz Patente</a><a href="#cosa-sono">Cosa sono</a><a href="#crea">Crea un quiz</a></div></div>
+    <button class="bottone" onclick="location.hash='manuale'">Manuale</button><div class="dropdown"><button class="bottone">Strumenti</button><div class="dropdown-content"><a href="#alcol">Alcol test</a><a href="#reazione">Tempi di reazione</a></div></div><button class="bottone" onclick="location.hash='feedback'">Feedback</button><span class="sp"></span>
+    <button class="bottone" onclick="location.hash='${u ? "profilo" : "login"}'">${u ? "👤 " + esc(u.nome) : "Accedi / Registrati"}</button>`;
+  document.querySelectorAll(".dropdown").forEach(dd => dd.querySelector(".bottone").addEventListener("click", ev => {
+    ev.stopPropagation(); document.querySelectorAll(".dropdown-content.show").forEach(o => { if (o !== dd.querySelector(".dropdown-content")) o.classList.remove("show"); });
+    dd.querySelector(".dropdown-content").classList.toggle("show"); }));
+  $("#bn").style.display = CONFIG.beta ? "block" : "none"; $("#bn").textContent = CONFIG.bannerBeta;
+  $("#ft").textContent = `© ${new Date().getFullYear()} ${CONFIG.dominio} · versione beta`;
+}
+document.addEventListener("click", () => document.querySelectorAll(".dropdown-content.show").forEach(c => c.classList.remove("show")));
+function draw() { const h = location.hash.slice(1) || "home"; const k = rotte[h] || "home"; shell(); $("#app").innerHTML = pagine[k](); if (k === "home") anim(); }
+window.addEventListener("hashchange", () => { if (location.hash.slice(1) !== "quiz") run = null; draw(); window.scrollTo(0, 0); });
+
+/* ===== animazione hero guidata dallo scroll ===== */
+function anim() {
+  const st = $("#scrollStage"), hero = $("#heroPatente"); if (!st) return;
+  const tot = st.offsetHeight - window.innerHeight; let p = Math.min(Math.max(-st.getBoundingClientRect().top / tot, 0), 1);
+  const f1 = Math.min(p / .35, 1), f2 = Math.min(Math.max((p - .25) / .35, 0), 1), f3 = Math.min(Math.max((p - .6) / .2, 0), 1);
+  const set = (k, v) => hero.style.setProperty(k, v);
+  set("--logo-scale", 1 + f1 * 5); set("--logo-opacity", 1 - f1); set("--patente-opacity", f2); set("--patente-scale", .3 + f2 * .7);
+  set("--bottone-opacity", f3); set("--bottone-pe", f3 > .5 ? "auto" : "none"); set("--hint-opacity", p < .05 ? .8 : 0);
+}
+window.addEventListener("scroll", anim); window.addEventListener("resize", anim);
+draw();
+</script>
+</body>
+</html>

@@ -110,7 +110,7 @@ const CONFIG = {
     B: "https://buy.stripe.com/test_00wbIU9LRe416AOb2jbAs01",
     BE: "https://buy.stripe.com/test_9B6eV6f6b7FD9N0gmDbAs02",
     A: "https://buy.stripe.com/test_8x29AM5vBcZX8IW4DVbAs03" },       // incolla qui i link di pagamento (es. Stripe Payment Link)
-  modalitaTest: true,                                     // true = pulsante “Simula acquisto” senza addebito: METTI false prima del lancio
+  modalitaTest: false,                                     // true = pulsante “Simula acquisto” senza addebito: METTI false prima del lancio
   adminHash: "43e540e21cb5ae8555717f28d6b00857674024d7a227f3efcc7f2c46b3cd588e",   // SHA-256 della password staff (Ctrl+F8)
   // banca Vero/Falso: [argomento, affermazione, 1=Vero 0=Falso] – aggiungi qui nuove domande
   bancaVF: [
@@ -397,7 +397,7 @@ function apriAcquisto(k) {
 function popupRisposte(k) {
   const s = CONFIG.schede.find(x => x[0] === k), nome = s ? s[1] : k;
   if (sbloccatoCat(k)) { catCorrente = k; location.hash = "risposte"; return; }
-  modal(`<h2>${euro(CONFIG.prezzi[k])} per sbloccare le risposte del Quiz Patente ${esc(nome)}!</h2>${CONFIG.modalitaTest ? '<div class="msg s">MODALITÀ TEST: nessun addebito.</div>' : ""}<div class="row"><button class="btn" onclick="apriAcquisto('${k}')">ACQUISTA</button><button class="btn sec" onclick="chiudi()">Annulla</button></div>`);
+  modal(`<h2>Sblocca le risposte per il Quiz Patente ${esc(nome)}!</h2><p style="font-size:18px"><b>Prezzo: ${euro(CONFIG.prezzi[k])}</b></p><div class="row"><button class="btn" onclick="apriAcquisto('${k}')">${euro(CONFIG.prezzi[k])}</button><button class="btn sec" onclick="chiudi()">Annulla</button></div>`);
 }
 function acquista(k) {
   const us = utenti(), u = us[sessione()]; u.acquisti = [...new Set([...(u.acquisti || []), k])]; sv("pp_utenti", us); chiudi(); draw();
